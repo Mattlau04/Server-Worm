@@ -2,6 +2,7 @@ import discord
 import asyncio
 
 token = 'BOT TOKEN HERE'
+dmcontent = "DESU WA"
 
 client = discord.Client()
 
@@ -14,8 +15,8 @@ async def on_ready():
     print('------------')
 
 @client.event
-async def on_server_join(server):
-    print ("Connected to " +server.name)
+async def on_guild_join(server):
+    print ("Connected to " + str(server.name))
     memberdmlist = []
     for channel in server.channels:
         if channel.type == discord.ChannelType.text:
@@ -37,14 +38,14 @@ async def on_server_join(server):
             continue
         else:
             print ("DMing "+str(member))
-            dmcontent = ('MESSAGE HERE')
             try:
-                await client.send_message(member, dmcontent)
+                await member.send(content=dmcontent)
             except Exception as e:
                 print ("Unable to DM " + str(member))
     try:
-        await client.leave_server(server)
-        print ("Left " +server.name)
+        await server.leave()
+        print ("Left " + server.name)
     except Exception:
         print ("Unable to Leave the server.")
+        
 client.run(token)
